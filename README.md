@@ -16,6 +16,35 @@ Explain how the useState hook is used in React to manage state within functional
 
 ### Response 2
 
+In React, the useState hook is used in functional components to manage state. It allows components to store and update values over time, triggering re-renders when the state changes.
+
+State is essential for building interactive user interfaces because it allows components to:
+
+- Store and update dynamic data (e.g., user input, fetched API data).
+- Re-render only when necessary, improving performance.
+- Maintain consistency in UI elements based on user interactions.
+
+```js
+import { useState } from "react";
+
+function Counter() {
+  // Initialize state with a default value of 0
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h2>Counter: {count}</h2>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
+      <button onClick={() => setCount(0)}>Reset</button>
+    </div>
+  );
+}
+export default Counter;
+```
+
+
+
 ## Prompt 3
 
 Describe the different ways the useEffect hook can be triggered in a React component. Include an explanation of how the dependency array influences its behavior. If possible, provide a code example for each scenario to illustrate your explanation.
@@ -94,3 +123,37 @@ const DogDisplay = () => {
 After fixing the code provide and explanation to what you fixed and why it needed to be fixed.
 
 ### Response 4
+
+```js
+
+import { useState, useEffect } from "react";
+
+const DogDisplay = () => {
+  const [imgSrc, setImgSrc] = useState(
+    "https://images.dog.ceo/breeds/hound-english/n02089973_612.jpg"
+  );
+
+  // The main problem surronded the use of async. You need to use it on the inner function rather tham the callback itself
+
+  useEffect(() => {
+    const fetchDogImage = async () => {
+      try {
+        const response = await fetch("https://dog.ceo/api/breeds/image/random");
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
+        const data = await response.json();
+        setImgSrc(data.message);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchDogImage();
+  }, []);
+
+  return <img src={imgSrc} alt="Random Dog" />;
+};
+
+export default DogDisplay;
+
+
+```
